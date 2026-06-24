@@ -1,0 +1,101 @@
+<app>
+  <meta 
+    title="Todo App"
+    description="A todo list application"
+  />
+  
+  <view>
+    <stack vertical width="100%" height="100vh" padding="20" gap="16">
+      
+      <!-- Header -->
+      <stack horizontal align="center" justify="between" gap="16">
+        <text fontSize="28" fontWeight="bold">My Todos</text>
+        <text fontSize="14" color="secondary">
+          {state.todos.filter(t => !t.completed).length} remaining
+        </text>
+      </stack>
+      
+      <!-- Add Todo Form -->
+      <stack horizontal gap="12" align="end">
+        <input 
+          placeholder="Add a new todo..."
+          value="{state.newTodoText}"
+          onChange="setNewTodoText"
+          flex="1"
+          padding="12"
+        />
+        <button 
+          onClick="addTodo"
+          padding="12 20"
+          background="primary"
+        >
+          +
+        </button>
+      </stack>
+      
+      <!-- Todo List -->
+      <scroll flex="1">
+        <stack vertical gap="12">
+          <for item in "{state.todos}">
+            <card padding="16" gap="12" align="center" justify="between">
+              <stack horizontal gap="12" flex="1" align="center">
+                
+                <!-- Checkbox -->
+                <checkbox 
+                  checked="{item.completed}"
+                  onChange="toggleTodo"
+                  data="{item.id}"
+                />
+                
+                <!-- Todo Text -->
+                <text 
+                  fontSize="16"
+                  flex="1"
+                  textDecoration="{item.completed ? 'line-through' : 'none'}"
+                  color="{item.completed ? 'secondary' : 'foreground'}"
+                >
+                  {item.title}
+                </text>
+                
+              </stack>
+              
+              <!-- Delete Button -->
+              <button 
+                onClick="deleteTodo"
+                data="{item.id}"
+                padding="8 12"
+                background="danger"
+                fontSize="12"
+              >
+                ×
+              </button>
+              
+            </card>
+          </for>
+        </stack>
+      </scroll>
+      
+      <!-- Empty State -->
+      <if condition="{state.todos.length === 0}">
+        <text fontSize="16" color="secondary" textAlign="center" padding="40">
+          No todos yet. Add one to get started!
+        </text>
+      </if>
+      
+      <!-- Stats -->
+      <stack horizontal gap="32" justify="center" padding="16" background="secondary">
+        <text fontSize="14">
+          Total: {state.todos.length}
+        </text>
+        <text fontSize="14">
+          Completed: {state.todos.filter(t => t.completed).length}
+        </text>
+        <text fontSize="14">
+          Remaining: {state.todos.filter(t => !t.completed).length}
+        </text>
+      </stack>
+      
+    </stack>
+  </view>
+  
+</app>

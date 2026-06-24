@@ -1,0 +1,13 @@
+node_modules/
+dist/
+*.js
+*.js.map
+*.d.ts
+target/
+Cargo.lock
+.DS_Store
+.env
+.env.local
+*.log
+.vscode-test/
+out/

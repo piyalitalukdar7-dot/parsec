@@ -1,0 +1,15 @@
+{
+  "copilot.codeCompletion.enabled": true,
+  "files.associations": {
+    "*.parsec": "parsec"
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/target": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[parsec]": {
+    "editor.defaultFormatter": null
+  }
+}

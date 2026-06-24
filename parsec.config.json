@@ -1,0 +1,58 @@
+{
+  "name": "parsec",
+  "version": "0.1.0",
+  "description": "PARSEC - Markup language for building apps with any backend",
+  
+  "components": {
+    "layout": ["stack", "grid", "box", "scroll"],
+    "content": ["text", "button", "input", "checkbox", "radio", "select", "image", "icon"],
+    "container": ["card", "modal", "bottomSheet", "tabs", "list"],
+    "navigation": ["navbar", "link"],
+    "control": ["if", "for", "while"],
+    "meta": ["app", "view", "component"]
+  },
+
+  "attributes": {
+    "layout": ["gap", "padding", "margin", "align", "justify", "flex", "width", "height"],
+    "style": ["fontSize", "fontWeight", "color", "background", "borderRadius", "shadow", "opacity"],
+    "events": ["onClick", "onChange", "onSubmit", "onFocus", "onBlur", "onHover"],
+    "state": ["value", "checked", "disabled", "open", "activeTab"]
+  },
+
+  "binding": {
+    "stateAccess": [
+      "{state.fieldName}",
+      "{state.nested.field}",
+      "{state.array[0]}",
+      "{state.array.length}"
+    ],
+    "expressions": [
+      "{state.count + 1}",
+      "{state.isActive ? 'Yes' : 'No'}",
+      "{state.items.filter(x => x.active)}"
+    ]
+  },
+
+  "backend": {
+    "endpoints": {
+      "GET /state": "Fetch initial app state",
+      "POST /actions/{actionName}": "Execute backend action with data, returns {state: {...}}"
+    },
+    "stateExample": {
+      "count": 0,
+      "user": { "id": 1, "name": "John" },
+      "items": [{ "id": 1, "title": "Task 1", "completed": false }]
+    }
+  },
+
+  "examples": {
+    "counter": "Counter app example in examples/counter.parsec",
+    "todo": "Todo app example in examples/todo.parsec"
+  },
+
+  "documentation": {
+    "full": "PARSEC_LANGUAGE_REFERENCE.md",
+    "aiGuide": "AI_PROMPTING_GUIDE.md",
+    "backend": "docs/BACKEND_GUIDE.md"
+  }
+}

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PARSEC Counter App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #app {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .counter-display {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 30px;
+      color: white;
+    }
+
+    .counter-value {
+      font-size: 64px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .counter-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-increment {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-increment:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-decrement {
+      background: #f093fb;
+      color: white;
+    }
+
+    .btn-decrement:hover {
+      background: #f068e5;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(240, 147, 251, 0.4);
+    }
+
+    .btn-reset {
+      grid-column: 1 / -1;
+      background: #e74c3c;
+      color: white;
+    }
+
+    .btn-reset:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(231, 76, 60, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .status {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-top: 20px;
+      padding: 12px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+
+    .warning {
+      color: #e74c3c;
+      font-weight: 600;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="loading">Loading PARSEC Counter App...</div>
+  </div>
+
+  <script>
+    // Fetch state and render
+    const backendUrl = 'http://localhost:8000';
+
+    async function initApp() {
+      try {
+        const response = await fetch(`${backendUrl}/state`);
+        const state = await response.json();
+        renderApp(state);
+      } catch (error) {
+        document.getElementById('app').innerHTML =
+          `<div style="color: red; padding: 20px;">Error: Cannot connect to backend at ${backendUrl}</div>`;
+      }
+    }
+
+    function renderApp(state) {
+      const { count } = state;
+      const isHigh = count > 10;
+      const isNegative = count < 0;
+
+      document.getElementById('app').innerHTML = `
+        <h1>Counter Application</h1>
+        <div class="counter-display">
+          <div class="counter-value">${count}</div>
+          <div class="counter-label">Current count</div>
+        </div>
+        <div class="controls">
+          <button class="btn-decrement" onclick="handleAction('decrement')">
+            − Decrease
+          </button>
+          <button class="btn-increment" onclick="handleAction('increment')">
+            + Increase
+          </button>
+          <button class="btn-reset" onclick="handleAction('reset')">
+            Reset to 0
+          </button>
+        </div>
+        ${
+          isHigh
+            ? '<div class="status"><span class="warning">⚠️ Count is getting high!</span></div>'
+            : ''
+        }
+        ${
+          isNegative
+            ? '<div class="status"><span class="warning">⚠️ Count is negative!</span></div>'
+            : ''
+        }
+        <div class="status">
+          Backend: <strong>Running ✓</strong> | 
+          State synced from <code>http://localhost:8000</code>
+        </div>
+      `;
+    }
+
+    async function handleAction(actionName) {
+      try {
+        const response = await fetch(`${backendUrl}/actions/${actionName}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: {} })
+        });
+        const result = await response.json();
+        renderApp(result.state);
+      } catch (error) {
+        console.error('Action failed:', error);
+      }
+    }
+
+    // Initialize on load
+    initApp();
+  </script>
+</body>
+</html>

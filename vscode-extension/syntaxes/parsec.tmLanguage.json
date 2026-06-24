@@ -1,0 +1,79 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "PARSEC",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#tag" },
+    { "include": "#binding" },
+    { "include": "#string" }
+  ],
+  "repository": {
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.block.parsec",
+          "begin": "<!--",
+          "end": "-->"
+        }
+      ]
+    },
+    "tag": {
+      "patterns": [
+        {
+          "name": "meta.tag.parsec",
+          "begin": "</?",
+          "end": ">",
+          "patterns": [
+            {
+              "name": "keyword.control.parsec",
+              "match": "\\b(app|view|text|button|stack|grid|input|checkbox|radio|select|image|icon|card|modal|bottomSheet|tabs|list|navbar|link|component|meta|if|for|else)\\b"
+            },
+            {
+              "name": "entity.other.attribute-name.parsec",
+              "match": "\\w+(?=\\s*=)"
+            },
+            { "include": "#string" }
+          ]
+        }
+      ]
+    },
+    "binding": {
+      "patterns": [
+        {
+          "name": "meta.binding.parsec",
+          "begin": "\\{",
+          "end": "\\}",
+          "contentName": "source.js"
+        }
+      ]
+    },
+    "string": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.parsec",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.parsec",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.parsec",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.parsec",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "scopeName": "text.parsec",
+  "fileTypes": ["parsec"]
+}

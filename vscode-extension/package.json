@@ -1,0 +1,116 @@
+{
+  "name": "parsec-vscode",
+  "displayName": "PARSEC Language Support",
+  "description": "Live preview and development tools for PARSEC markup language",
+  "version": "0.1.0",
+  "publisher": "parsec",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parsec/parsec"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Debuggers",
+    "Visualization"
+  ],
+  "activationEvents": [
+    "onLanguage:parsec",
+    "onCommand:parsec.openPreview"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "parsec",
+        "aliases": [
+          "PARSEC",
+          "parsec"
+        ],
+        "extensions": [
+          ".parsec"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "parsec",
+        "scopeName": "text.parsec",
+        "path": "./syntaxes/parsec.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "parsec.openPreview",
+        "title": "PARSEC: Open Preview",
+        "category": "PARSEC"
+      },
+      {
+        "command": "parsec.togglePreview",
+        "title": "PARSEC: Toggle Preview",
+        "category": "PARSEC"
+      },
+      {
+        "command": "parsec.setBackendUrl",
+        "title": "PARSEC: Set Backend URL",
+        "category": "PARSEC"
+      },
+      {
+        "command": "parsec.showLanguageReference",
+        "title": "PARSEC: Show Language Reference",
+        "category": "PARSEC"
+      },
+      {
+        "command": "parsec.showHelp",
+        "title": "PARSEC: Show AI Prompting Guide",
+        "category": "PARSEC"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "parsec.openPreview",
+        "key": "ctrl+shift+p",
+        "when": "editorLangId == parsec"
+      }
+    ],
+    "configuration": {
+      "title": "PARSEC",
+      "properties": {
+        "parsec.backendUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "URL of the PARSEC backend server"
+        },
+        "parsec.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically refresh preview on file changes"
+        },
+        "parsec.deviceFrames": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show device frames in preview"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run build",
+    "test": "node ./dist/test/runTest.js",
+    "lint": "eslint src/**/*.ts",
+    "vscode:prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.40.0"
+  }
+}
